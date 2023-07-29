@@ -5,7 +5,7 @@
 * @array: the heap to fix
 * @root: the root of the heap
 * @end: the last index of the heap
-* @size: size of  array
+* @size: size of the array
 * Return: void
 */
 void sift_down(int *array, size_t root, size_t end, size_t size)
@@ -34,7 +34,7 @@ void sift_down(int *array, size_t root, size_t end, size_t size)
 /**
 * make_heap - makes a heap from unsorted array
 * @array: array to turn into a heap
-* @size: size of  array
+* @size: size of the array
 * Return: void
 */
 void make_heap(int *array, size_t size)

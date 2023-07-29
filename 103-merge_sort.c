@@ -7,7 +7,7 @@
 * @start: starting index (inclusive) for the left sub array
 * @middle: end index (exclusive) for the left sub array and
 * starting index (inclusive) for the right sub array
-* @end: end index (exclusive) for a right sub array
+* @end: end index (exclusive) for the right sub array
 * @dest: destination for data
 * @source: source of data
 * Return: void
@@ -42,9 +42,9 @@ void TDMerge(size_t start, size_t middle, size_t end, int *dest, int *source)
 
 /**
 * TDSplitMerge - splits the array and merges the sorted arrays
-* @start: beginning index (inclusive)
+* @start: starting index (inclusive)
 * @end: end index (exclusive)
-* @array:  array to sort
+* @array: the array to sort
 * @copy: a duplicate of the array
 * Return: void
 */
@@ -63,7 +63,7 @@ void TDSplitMerge(size_t start, size_t end, int *array, int *copy)
 }
 
 /**
-* merge_sort - sorts  array of integers in ascending order using the
+* merge_sort - sorts an array of integers in ascending order using the
 * Merge sort algorithm
 * @array: array to sort
 * @size: the size of array
