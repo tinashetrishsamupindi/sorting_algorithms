@@ -1,76 +1,86 @@
 #include "sort.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /**
-* sift_down - amends a heap
-* @array: the heap to fix
-* @root: the root of the heap
-* @end: the last index of the heap
-* @size: size of  array
+* TDMerge - sorts and also  merges the sub arrays in source
+* @start: starting index (inclusive) for the left sub array
+* @middle: end index (exclusive) for the left sub array and
+* starting index (inclusive) for the right sub array
+* @end: end index (exclusive) for a right sub array
+* @dest: destination for data
+* @source: source of data
 * Return: void
 */
-void sift_down(int *array, size_t root, size_t end, size_t size)
+void TDMerge(size_t start, size_t middle, size_t end, int *dest, int *source)
 {
-	size_t left_child, right_child, swap;
-	int temp;
+	size_t i, j, k;
 
-	while ((left_child = (2 * root) + 1) <= end)
+	printf("Merging...\n");
+	printf("[left]: ");
+	print_array(source + start, middle - start);
+	printf("[right]: ");
+	print_array(source + middle, end - middle);
+	i = start;
+	j = middle;
+	for (k = start; k < end; k++)
 	{
-		swap = root;
-		right_child = left_child + 1;
-		if (array[swap] < array[left_child])
-			swap = left_child;
-		if (right_child <= end && array[swap] < array[right_child])
-			swap = right_child;
-		if (swap == root)
-			return;
-		temp = array[root];
-		array[root] = array[swap];
-		array[swap] = temp;
-		print_array(array, size);
-		root = swap;
+		if (i < middle && (j >= end || source[i] <= source[j]))
+		{
+			dest[k] = source[i];
+			i++;
+		}
+		else
+		{
+			dest[k] = source[j];
+			j++;
+		}
 	}
+	printf("[Done]: ");
+	print_array(dest + start, end - start);
 }
 
 /**
-* make_heap - makes a heap from unsorted array
-* @array: array to turn into a heap
-* @size: size of  array
+* TDSplitMerge - splits the array and merges the sorted arrays
+* @start: beginning index (inclusive)
+* @end: end index (exclusive)
+* @array:  array to sort
+* @copy: a duplicate of the array
 * Return: void
 */
-void make_heap(int *array, size_t size)
+void TDSplitMerge(size_t start, size_t end, int *array, int *copy)
 {
-	size_t parent;
+	size_t middle;
 
-	for (parent = ((size - 1) - 1) / 2; 1; parent--)
-	{
-		sift_down(array, parent, size - 1, size);
-		if (parent == 0)
-			break;
-	}
+	if (end - start < 2)
+		return;
+	middle = (start + end) / 2;
+	TDSplitMerge(start, middle, array, copy);
+	TDSplitMerge(middle, end, array, copy);
+	TDMerge(start, middle, end, array, copy);
+	for (middle = start; middle < end; middle++)
+		copy[middle] = array[middle];
 }
 
 /**
-* heap_sort - sorts an array of ints in ascending order w/ the Heap sort algo
+* merge_sort - sorts  array of integers in ascending order using the
+* Merge sort algorithm
 * @array: array to sort
-* @size:the  size of the array
+* @size: the size of array
 * Return: void
 */
-void heap_sort(int *array, size_t size)
+void merge_sort(int *array, size_t size)
 {
-	size_t end;
-	int temp;
+	size_t i;
+	int *copy;
 
 	if (array == NULL || size < 2)
 		return;
-	make_heap(array, size);
-	end = size - 1;
-	while (end > 0)
-	{
-		temp = array[end];
-		array[end] = array[0];
-		array[0] = temp;
-		print_array(array, size);
-		end--;
-		sift_down(array, 0, end, size);
-	}
+	copy = malloc(sizeof(int) * size);
+	if (copy == NULL)
+		return;
+	for (i = 0; i < size; i++)
+		copy[i] = array[i];
+	TDSplitMerge(0, size, array, copy);
+	free(copy);
 }
